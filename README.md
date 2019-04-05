@@ -71,9 +71,9 @@ Why so pain?!!!
 
 Take some ideas from [CQRS](https://martinfowler.com/bliki/CQRS.html), make it asynchronous, performant, batch optimized with eventual consistency easily guaranteed.
 
-## Could it really be that simple yet not a terrible idea?
+## I heard this sort of simplicity is a terrible unscaleable idea. Could this really work for me?
 
-Yes. It makes a lot of nice, broad assumptions about your data model which are right for most cases. Funnily enough these are the same simplifying assumptions that helped HTTP REST to kill SOAP: Namely...
+Yes. It makes a lot of nice, broad assumptions about your data model which are right for *most* cases. Funnily enough these are the same simplifying assumptions that helped HTTP REST to kill SOAP: Namely...
 
 -  Your app is fairly CRUD based.
 -  You don't sweat the extra I/O of sending the whole payload instead of complicated partial updates. (that's why it's a calm, fat river, not a choppy stream)
@@ -99,9 +99,13 @@ We do this stuff single threaded so no problems within a river. As with any asyn
 
 Nope. Any ruby program with access to a shared PostgreSQL server works fine.
 
+## Wait, there are River objects sharing the same name in different services but they're different kinds of object.
+
+Yup. This a simple way of making clear that there's only room for a writer(source) or reader(mouth) in the same service, not both. I'm touched you want to use it everwhere but it's probably better to have clear one-way data flows. Anyway, you can namespace under different modules just so long as the class names match.
+
 ## Why are you dissing Event Sourcing?
 
-Actually I think it's a beautiful concept, DDD is a great way to do collaboration on many projects and I'd love an excuse to use it more for compellingly complex domains. But for most projects and and skillsets it's just overkill and turns easy things hard and risky without enough reward.
+Actually I think it's a beautiful concept, DDD is a great way to do collaboration on many projects and I'd love an excuse to use it for more compellingly complex domains... But for most projects and and skillsets it's just overkill and turns easy things hard and risky without enough reward.
 
 ## Do you have a surprisingly apt quote for me?
 
