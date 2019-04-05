@@ -71,7 +71,7 @@ Why so pain?!!!
 
 Take some ideas from [CQRS](https://martinfowler.com/bliki/CQRS.html), make it asynchronous, performant, batch optimized with eventual consistency easily guaranteed.
 
-## I heard this sort of simplicity is a terrible unscaleable idea. Could this really work for me?
+## This looks much simpler than how you're *meant* to do event streaming. Could this really work for me?
 
 Yes. It makes a lot of nice, broad assumptions about your data model which are right for *most* cases. Funnily enough these are the same simplifying assumptions that helped HTTP REST to kill SOAP: Namely...
 
