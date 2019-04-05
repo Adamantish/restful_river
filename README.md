@@ -4,6 +4,24 @@
 ### Got Microservices? 
 Let's PUTS stressful streams in the ditch.
 
+## The Problem
+
+- You have some ruby microservices.
+- Guaranteeing consistent state everywhere is a complete PITA.
+- Your app is fairly CRUD oriented.
+
+Back when you had a monolith at least you just had one database. That idea won't fly now. What to do?
+- **HTTP REST (Post/Puts/Delete)?** Easy but you know it's a BAAD idea for so many reasons - mostly that you now have synchronous calls spoiling your nice, autonomous services.
+- **Event driven?** What are we, google? The army? I'm supposed to write millions of callbacky, [Rube Goldberg](https://en.wikipedia.org/wiki/Rube_Goldberg_machine) event handlers and STILL I'm screwed for consistency if anything ever goes wrong? Do I re-trigger all events then? That takes forever and who knows if it even works because what about the deletes? ...Maybe I should start researching fancy message brokers...
+- **Event Sourced?** I will be google. I *can* havez the guaranteed eventual consistency if I only throw away my SQL databases, replace with one event store, rewrite my app with a [DDD](https://airbrake.io/blog/software-design/domain-driven-design) philosophy, carefully preserve every outdated piece of business logic I ever wrote and don't write an event handlers which touch the outside world. 
+
+Why so pain?!!!
+ 
+## A Solution
+
+**Do the bad REST thing but make it good!**
+
+Take some ideas from [CQRS](https://martinfowler.com/bliki/CQRS.html), make it asynchronous, performant, batch optimized with eventual consistency easily guaranteed.
 
 ## I wants tha codez
 
@@ -50,37 +68,18 @@ What if the problem was on the other end? Messages didn't get "rivered" in the f
 
 Also "woah, that ran so fast I could even just put it in a scheduled job and become a very relaxed person!" 
 
-**Ok, so what's this really for? Let's start at the beginning...**
-
-## The Problem
-
-- You have some ruby microservices.
-- Guaranteeing consistent state everywhere is a complete PITA.
-- Your app is fairly CRUD oriented.
-
-Back when you had a monolith at least you just had one database. That idea won't fly now. What to do?
-- **HTTP REST (Post/Puts/Delete)?** Easy but you know it's a BAAD idea for so many reasons - mostly that you now have synchronous calls spoiling your nice, autonomous services.
-- **Event driven?** What are we, google? The army? I'm supposed to write millions of callbacky, [Rube Goldberg](https://en.wikipedia.org/wiki/Rube_Goldberg_machine) event handlers and STILL I'm screwed for consistency if anything ever goes wrong? Do I re-trigger all events then? That takes forever and who knows if it even works because what about the deletes? ...Maybe I should start researching fancy message brokers...
-- **Event Sourced?** I will be google. I *can* havez the guaranteed eventual consistency if I only throw away my SQL databases, replace with one event store, rewrite my app with a [DDD](https://airbrake.io/blog/software-design/domain-driven-design) philosophy, carefully preserve every outdated piece of business logic I ever wrote and don't write an event handlers which touch the outside world. 
-
-Why so pain?!!!
- 
-## A Solution
-
-**Do the bad REST thing but make it good!**
-
-Take some ideas from [CQRS](https://martinfowler.com/bliki/CQRS.html), make it asynchronous, performant, batch optimized with eventual consistency easily guaranteed.
-
 ## This looks much simpler than how you're *meant* to do event streaming. Could this really work for me?
 
-Yes. It makes a lot of nice, broad assumptions about your data model which are right for *most* cases. Funnily enough these are the same simplifying assumptions that helped HTTP REST to kill SOAP: Namely...
+Yes. It makes a lot of nice, broad assumptions about your data model which are right for *most* cases.  Funnily enough these are the same simplifying assumptions that helped HTTP REST to kill SOAP: Namely...
 
 -  Your app is fairly CRUD based.
 -  You don't sweat the extra I/O of sending the whole payload instead of complicated partial updates. (that's why it's a calm, fat river, not a choppy stream)
 
+In terms of sheer efficiency, the heavy lifting is largely in the PostgreSQL engine. Whilst the I/O of a river is usually broader than a stream it's not in such a dangerous place. In fact, for services that don't need updating so often it becomes trivial to rate limit high I/O updates of the same entities.
+
 ## What is this sorcery?
 
-You mean "how does it work"? You know, you could have just asked in a normal way. 
+You mean "how does it work"? You know, you could have just asked that in a normal way. 
 
 Pretty simple really. It breaks a "rule" and asks to be pointed to a shared PostgreSQL server (but, hey, I bet you have one spun up already). 
 
