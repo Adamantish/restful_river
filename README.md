@@ -2,7 +2,7 @@
 # RESTful River
 
 ### Got Microservices? 
-***Let's PUTS stressful streams in the ditch.***
+Let's PUTS stressful streams in the ditch.
 
 
 ## I wants tha codez
