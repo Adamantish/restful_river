@@ -70,7 +70,7 @@ Also "woah, that ran so fast I could even just put it in a scheduled job and bec
 
 ## This looks much simpler than how you're *meant* to do event streaming. Could this really work for me?
 
-Yes. It makes a lot of nice, broad assumptions about your data model which are right for *most* cases.  Funnily enough these are the same simplifying assumptions that helped HTTP REST to kill SOAP: Namely...
+Yes. Because it's not event streaming, it's managed one-way state sharing. It makes a lot of nice, broad assumptions about your data model which are right for *most* cases.  Funnily enough these are the same simplifying assumptions that helped HTTP REST to kill SOAP: Namely...
 
 -  Your app is fairly CRUD based.
 -  You don't sweat the extra I/O of sending the whole payload instead of complicated partial updates. (that's why it's a calm, fat river, not a choppy stream)
