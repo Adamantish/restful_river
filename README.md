@@ -41,7 +41,7 @@ class MyProfilesRiver < RestfulRiver::Mouth
   mouth_breathers [MyProfileReceiver, SomeOtherNoseyClass] # Or you can say `listeners` if you have no joy.
 end
 
-class MyProfileReceiver
+class MyProfileReceiver # notice this is just a PORO. All your domain specific logic won't get too tangled with this gem.
   def puts(profile_payloads)
 	# Do your clever, efficient stuff with this batch of payloads or just n+1 if it's no biggy
 	# but remember to store the payload.river_timestamp if you want the really good stuff I'll tell you next.
