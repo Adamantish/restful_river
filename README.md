@@ -2,9 +2,9 @@
 # RESTful River
 
 ### Got Microservices? 
-Let's PUTS stressful streams in the ditch.
+Let's PUT stressful streams in the ditch.
 
-## The Problem
+## The Situation
 
 - You have some ruby microservices.
 - Guaranteeing consistent state everywhere is a complete PITA.
@@ -12,8 +12,8 @@ Let's PUTS stressful streams in the ditch.
 
 Back when you had a monolith at least you just had one database. That idea won't fly now. What to do?
 - **HTTP REST (Post/Puts/Delete)?** Easy but you know it's a BAAD idea for so many reasons - mostly that you now have synchronous calls spoiling your nice, autonomous services.
-- **Event driven?** What are we, google? The army? I'm supposed to write millions of callbacky, [Rube Goldberg](https://en.wikipedia.org/wiki/Rube_Goldberg_machine) event handlers and STILL I'm screwed for consistency if anything ever goes wrong? Do I re-trigger all events then? That takes forever and who knows if it even works because what about the deletes? ...Maybe I should start researching fancy message brokers...
-- **Event Sourced?** I will be google. I *can* havez the guaranteed eventual consistency if I only throw away my SQL databases, replace with one event store, rewrite my app with a [DDD](https://airbrake.io/blog/software-design/domain-driven-design) philosophy, carefully preserve every outdated piece of business logic I ever wrote and don't write an event handlers which touch the outside world. 
+- **Event driven?** What are we, google? The army? This is *not* why I chose Rails. I'm supposed to write millions of callbacky, [Rube Goldberg](https://en.wikipedia.org/wiki/Rube_Goldberg_machine) event handlers and STILL I'm screwed for consistency if anything ever goes wrong? Do I re-trigger all events then? That takes forever and who knows if it even works because what about the deletes? (To be fair, if there is so much state that needs sharing, perhaps some services should be merged.)
+- **Event Sourced?** Ok, I will be google. I *can* havez the guaranteed eventual consistency if I only throw away my SQL databases, replace with one event store, rewrite my app with a [DDD](https://airbrake.io/blog/software-design/domain-driven-design) philosophy, carefully preserve every outdated piece of business logic I ever wrote and don't write any event handlers which touch the outside world. 
 
 Why so pain?!!!
  
@@ -81,30 +81,29 @@ In terms of sheer efficiency, the heavy lifting is largely in the PostgreSQL eng
 
 You mean "how does it work"? You know, you could have just asked that in a normal way. 
 
-Pretty simple really. It breaks a "rule" and asks to be pointed to a shared PostgreSQL server (but, hey, I bet you have one spun up already). 
+Pretty simple really. It breaks a "rule" and asks to be pointed to a PostgreSQL server (but, hey, I bet you have one spun up already) and quietly makes a shared database. 
 
 In another sense it doesn't break the rule. If this database goes down it's the same as a message broker going down. i.e. services can keep functioning even if they go a bit out of date.
 
 In contrast to a full on message broker,  the latest version of every entity (indexed by id) is retained so it's easy to batch up requests when needing to scale and full
 reconciliation becomes no problem.
 
-Really, this is less a framework, more a handy pattern for secretly using a shared database without getting hurt. That and a little pub/sub and a bunch of optimizations.
+## If so simple, why do I need a gem?
 
-## What about race conditions?
+So much good stuff under the hood going on to avoid race conditions with single-threadedness whilst parallelising other workloads.
 
-We do this stuff single threaded so no problems within a river. As with any async approach you can't be posting first into one river then another if they *must* be processed in that order.
 
 ## Is this just a Rails thing?
 
 Nope. Any ruby program with access to a shared PostgreSQL server works fine.
 
-## Wait, there are River objects sharing the same name in different services but they're different kinds of object.
+## Wait, there are River objects sharing the same name in different services but one is a `Source`, the other is a `Mouth`.
 
 Yup. This a simple way of making clear that there's only room for a writer(source) or reader(mouth) in the same service, not both. I'm touched you want to use it everwhere but it's probably better to have clear one-way data flows. Anyway, you can namespace under different modules just so long as the class names match.
 
 ## Why are you dissing Event Sourcing?
 
-Actually I think it's a beautiful concept, DDD is a great way to do collaboration on many projects and I'd love an excuse to use it for more compellingly complex domains... But for most projects and and skillsets it's just overkill and turns easy things hard and risky without enough reward.
+Actually I think it's a beautiful concept, DDD is a great way to do collaboration with non-technical people on many projects and I'd love an excuse to use it for more compellingly complex domains... But for most projects and and skillsets it's just overkill and turns easy things hard and risky without enough reward.
 
 ## Do you have a surprisingly apt quote for me?
 
