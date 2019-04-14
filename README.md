@@ -12,7 +12,7 @@ Let's PUT stressful streams in the ditch.
 
 Back when you had a monolith at least you just had one database. That idea won't fly now. What to do?
 - **HTTP REST (Post/Puts/Delete)?** Easy but you know it's a BAAD idea for so many reasons - mostly that you now have synchronous calls spoiling your nice, autonomous services.
-- **Event driven?** What are we, google? The army? This is *not* why I chose Rails. I'm supposed to write millions of callbacky, [Rube Goldberg](https://en.wikipedia.org/wiki/Rube_Goldberg_machine) event handlers and STILL I'm screwed for consistency if anything ever goes wrong? Do I re-trigger all events then? That takes forever and who knows if it even works because what about the deletes? (To be fair, if there is so much state that needs sharing, perhaps some services should be merged but, hey, we are where we are.)
+- **Event driven?** What am I, google? The army? This is *not* why I chose Rails. I'm supposed to write millions of callbacky, [Rube Goldberg](https://en.wikipedia.org/wiki/Rube_Goldberg_machine) event handlers and STILL I'm screwed for consistency if anything ever goes wrong? Do I re-trigger all events then? That takes forever and who knows if it even works because what about the deletes? (To be fair, if there is so much state that needs sharing, perhaps some services should be merged but, hey, we are where we are.)
 - **Event Sourced?** Ok, I will be google. I *can* havez the guaranteed eventual consistency if I only throw away my SQL databases, replace with one event store, rewrite my app with a [DDD](https://airbrake.io/blog/software-design/domain-driven-design) philosophy, carefully preserve every outdated piece of business logic I ever wrote and don't write any event handlers which touch the outside world. 
 
 Why so pain?!!!
@@ -21,7 +21,7 @@ Why so pain?!!!
 
 **Do the bad REST thing but make it good!**
 
-Take some ideas from [CQRS](https://martinfowler.com/bliki/CQRS.html), make it asynchronous, performant, batch optimized with eventual consistency easily guaranteed.
+Take some ideas from [CQRS](https://martinfowler.com/bliki/CQRS.html), make it asynchronous, performant, batch optimized with eventual consistency easily guaranteed. Something that can horizontally scale to really damn big if necessary.
 
 ## I wants tha codez
 
