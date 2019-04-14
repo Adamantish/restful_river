@@ -103,7 +103,7 @@ Yup. This a simple way of making clear that there's only room for a writer(sourc
 
 ## Why are you dissing Event Sourcing?
 
-Actually I think it's a beautiful concept, DDD is a great way to do collaboration with non-technical people on many projects and I'd love an excuse to use it for more compellingly complex domains... But for most projects and and skillsets it's just overkill and turns easy things hard and risky without enough reward.
+Actually I think it's a beautiful concept, DDD is a great way to do collaboration with non-technical people on many complex problems and I'd love an excuse to use it personally for more compellingly complex domains... But for most projects and and skillsets it's just overkill and turns easy things hard and risky without enough reward.
 
 ## Do you have a surprisingly apt quote for me?
 
