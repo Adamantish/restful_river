@@ -79,7 +79,7 @@ In terms of sheer efficiency, the heavy lifting is largely in the PostgreSQL eng
 
 ## What is this sorcery?
 
-You mean "how does it work"? You know, you could have just asked that in a normal way. 
+You mean "how does it work"? You know, you could have just asked it that way. 
 
 Pretty simple really. It breaks a "rule" and asks to be pointed to a PostgreSQL server (but, hey, I bet you have one spun up already) and quietly makes a shared database. 
 
@@ -92,6 +92,9 @@ reconciliation becomes no problem.
 
 So much good stuff under the hood going on to avoid race conditions with single-threadedness whilst parallelising other workloads.
 
+## So you're saying this is how we should all be doing microservice communication?
+
+No. In a perfect world your services are really orthogonal to each other and it will be quite clear how to make a small and meaningful set of domain events cover all cases. Even when it's not clear, if you have a large project with multiple teams you should probably strive for it. Use this lib if you know that you would otherwise be writing events like `update_thing`, `destroy_thing`, `resync_nested_thingy`. Or if you have a lot of inter-service `POST`s going on that could be async.
 
 ## Is this just a Rails thing?
 
@@ -100,6 +103,8 @@ Nope. Any ruby program with access to a shared PostgreSQL server works fine.
 ## Wait, there are River objects sharing the same name in different services but one is a `Source`, the other is a `Mouth`.
 
 Yup. This a simple way of making clear that there's only room for a writer(source) or reader(mouth) in the same service, not both. I'm touched you want to use it everwhere but it's probably better to have clear one-way data flows. Anyway, you can namespace under different modules just so long as the class names match.
+
+
 
 ## Why are you dissing Event Sourcing?
 
