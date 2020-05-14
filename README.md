@@ -74,6 +74,7 @@ Yes. Because it's not event streaming, it's async, one-way state transmission. I
 
 -  Your app is fairly CRUD based.
 -  You don't sweat the extra I/O of sending the whole payload instead of complicated partial updates. (that's why it's a calm, fat river, not a choppy stream)
+- Your consumer services' data can be reasonably packaged into independent entities in which it doesn't matter which order items receive updates. i.e. your data is broadly tree shaped with parents that can be packaged up with children.
 
 In terms of sheer efficiency, the heavy lifting is largely in the PostgreSQL engine. Whilst the I/O of a river is usually broader than a stream it's not in such a dangerous place. In fact, for services that don't need updating so often it becomes trivial to rate limit high I/O updates of the same entities.
 
